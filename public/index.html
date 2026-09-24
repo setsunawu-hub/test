@@ -214,6 +214,109 @@
     border-bottom:2px solid var(--accent-2);
   }
 
+  /* ---------- guestbook ---------- */
+  .guestbook-grid{
+    display:grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(28px, 5vw, 56px);
+    align-items:start;
+  }
+  @media (max-width: 720px){
+    .guestbook-grid{ grid-template-columns:1fr; }
+  }
+  .guestbook-form{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding: clamp(24px,4vw,32px);
+  }
+  .guestbook-form label{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:.78rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .guestbook-form input,
+  .guestbook-form textarea{
+    font-family:"Literata", Georgia, serif;
+    font-size:1rem;
+    color:var(--ink);
+    background:var(--bg);
+    border:1px solid var(--line);
+    padding:10px 12px;
+    resize:vertical;
+  }
+  .guestbook-form input:focus,
+  .guestbook-form textarea:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+  }
+  .guestbook-form button{
+    align-self:flex-start;
+    margin-block-start:4px;
+    padding:10px 22px;
+    background:var(--accent);
+    color:var(--surface);
+    border:none;
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:.95rem;
+    font-weight:600;
+    letter-spacing:.02em;
+    cursor:pointer;
+  }
+  .guestbook-form button:hover{ background:var(--accent-2); }
+  .guestbook-form button:disabled{ opacity:.6; cursor:default; }
+  .guestbook-status{
+    min-height:1.2em;
+    font-size:.85rem;
+    color:var(--ink-soft);
+  }
+  .guestbook-list-wrap{
+    max-height:440px;
+    overflow-y:auto;
+    border:1px solid var(--line);
+    background:var(--surface);
+  }
+  .guestbook-list{ list-style:none; margin:0; padding:0; }
+  .guestbook-entry{
+    padding: 16px clamp(20px,3vw,28px);
+    border-bottom:1px solid var(--line);
+  }
+  .guestbook-entry:last-child{ border-bottom:none; }
+  .guestbook-entry-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+    margin-block-end:6px;
+  }
+  .guestbook-entry-name{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:600;
+    color:var(--accent);
+  }
+  .guestbook-entry-time{
+    font-size:.78rem;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .guestbook-entry-message{
+    font-size:.98rem;
+    color:var(--ink);
+    text-wrap:pretty;
+    overflow-wrap:break-word;
+  }
+  .guestbook-empty{
+    padding: clamp(24px,4vw,32px);
+    color:var(--ink-soft);
+    font-size:.95rem;
+    text-align:center;
+    list-style:none;
+  }
+
   /* ---------- closing ---------- */
   .closing{
     background:var(--ink);
@@ -332,6 +435,28 @@
       </div>
     </section>
 
+    <section class="guestbook" id="guestbook">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2 class="section-title">留言板</h2>
+      </div>
+      <div class="guestbook-grid">
+        <form class="guestbook-form" id="guestbook-form" novalidate>
+          <label for="gb-name">你的名字</label>
+          <input type="text" id="gb-name" name="name" maxlength="40" required placeholder="例如:海邊路人">
+          <label for="gb-message">留言</label>
+          <textarea id="gb-message" name="message" maxlength="280" required rows="3" placeholder="留一句話給 Flora 吧"></textarea>
+          <button type="submit" id="gb-submit">送出留言</button>
+          <p class="guestbook-status" id="gb-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="guestbook-list-wrap">
+          <ul class="guestbook-list" id="guestbook-list">
+            <li class="guestbook-empty" id="guestbook-empty">還沒有留言,當第一個留言的人吧。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="closing" id="contact">
@@ -347,3 +472,111 @@
   </footer>
 
 </div>
+
+<script>
+(function(){
+  var form = document.getElementById('guestbook-form');
+  var nameInput = document.getElementById('gb-name');
+  var messageInput = document.getElementById('gb-message');
+  var submitBtn = document.getElementById('gb-submit');
+  var status = document.getElementById('gb-status');
+  var list = document.getElementById('guestbook-list');
+  var emptyItem = document.getElementById('guestbook-empty');
+
+  function formatTime(raw){
+    try{
+      var d = new Date(String(raw).replace(' ', 'T') + 'Z');
+      return d.toLocaleString(undefined, { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    }catch(e){
+      return raw;
+    }
+  }
+
+  function renderEntry(entry){
+    var li = document.createElement('li');
+    li.className = 'guestbook-entry';
+
+    var head = document.createElement('div');
+    head.className = 'guestbook-entry-head';
+
+    var name = document.createElement('span');
+    name.className = 'guestbook-entry-name';
+    name.textContent = entry.name;
+
+    var time = document.createElement('span');
+    time.className = 'guestbook-entry-time';
+    time.textContent = formatTime(entry.created_at);
+
+    head.appendChild(name);
+    head.appendChild(time);
+
+    var message = document.createElement('p');
+    message.className = 'guestbook-entry-message';
+    message.textContent = entry.message;
+
+    li.appendChild(head);
+    li.appendChild(message);
+    return li;
+  }
+
+  function renderList(entries){
+    list.innerHTML = '';
+    if(!entries.length){
+      list.appendChild(emptyItem);
+      return;
+    }
+    entries.forEach(function(entry){ list.appendChild(renderEntry(entry)); });
+  }
+
+  function loadMessages(){
+    fetch('/api/messages')
+      .then(function(res){
+        if(!res.ok) throw new Error('load failed');
+        return res.json();
+      })
+      .then(renderList)
+      .catch(function(){
+        list.innerHTML = '';
+        var li = document.createElement('li');
+        li.className = 'guestbook-empty';
+        li.textContent = '留言板暫時無法載入,稍後再試試。';
+        list.appendChild(li);
+      });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = nameInput.value.trim();
+    var message = messageInput.value.trim();
+    if(!name || !message){
+      status.textContent = '請填寫名字和留言內容。';
+      return;
+    }
+    submitBtn.disabled = true;
+    status.textContent = '送出中…';
+    fetch('/api/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, message: message })
+    })
+      .then(function(res){
+        if(!res.ok) throw new Error('submit failed');
+        return res.json();
+      })
+      .then(function(entry){
+        if(list.contains(emptyItem)) emptyItem.remove();
+        list.insertBefore(renderEntry(entry), list.firstChild);
+        form.reset();
+        status.textContent = '留言成功送出,謝謝你!';
+      })
+      .catch(function(){
+        status.textContent = '送出失敗,請稍後再試一次。';
+      })
+      .finally(function(){
+        submitBtn.disabled = false;
+      });
+  });
+
+  loadMessages();
+})();
+</script>
