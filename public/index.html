@@ -68,7 +68,6 @@
     padding-inline: clamp(20px, 6vw, 96px);
     padding-block: clamp(28px, 6vw, 56px) 0;
     position:relative;
-    overflow:hidden;
   }
   .hero-top{
     display:flex;
@@ -89,11 +88,44 @@
     align-items:baseline;
     gap:20px;
   }
-  .lang-link{
-    text-decoration:underline;
-    text-underline-offset:3px;
+  .lang-switch{ position:relative; }
+  .lang-switch summary{
+    cursor:pointer;
+    list-style:none;
+    display:flex;
+    align-items:baseline;
+    gap:5px;
   }
-  .lang-link:hover{ opacity:1; }
+  .lang-switch summary::-webkit-details-marker{ display:none; }
+  .lang-switch summary::after{ content:"▾"; font-size:.65em; }
+  .lang-switch:hover summary,
+  .lang-switch[open] summary{ opacity:1; }
+  .lang-menu{
+    position:absolute;
+    top:calc(100% + 10px);
+    right:0;
+    z-index:20;
+    list-style:none;
+    margin:0;
+    padding:6px 0;
+    min-width:140px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    box-shadow:0 8px 24px var(--shadow);
+  }
+  .lang-menu li a,
+  .lang-menu li span{
+    display:block;
+    padding:8px 16px;
+    font-size:.8rem;
+    letter-spacing:.04em;
+    text-transform:none;
+    color:var(--ink);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .lang-menu li a:hover{ background:var(--bg-alt); }
+  .lang-menu li .current{ color:var(--accent); font-weight:600; }
   .eyebrow{
     font-size:.78rem;
     letter-spacing:.16em;
@@ -436,10 +468,16 @@
   <header class="hero">
     <div class="hero-top">
       <span class="mark">Flora</span>
-      <div class="hero-top-right">
-        <span class="mark">甜點主廚・食品研發顧問</span>
-        <a class="mark lang-link" href="/en/">EN</a>
-      </div>
+      <details class="lang-switch mark">
+        <summary>正體中文</summary>
+        <ul class="lang-menu">
+          <li><span class="current">正體中文</span></li>
+          <li><a href="/en/">English</a></li>
+          <li><a href="/ko/">한국어</a></li>
+          <li><a href="/ja/">日本語</a></li>
+          <li><a href="/vi/">Tiếng Việt</a></li>
+        </ul>
+      </details>
     </div>
 
     <div class="eyebrow">Head Pastry Chef · Food R&amp;D Consultant</div>
