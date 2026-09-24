@@ -316,6 +316,29 @@
     text-align:center;
     list-style:none;
   }
+  .guestbook-summary{
+    margin-block-start: clamp(28px,4vw,40px);
+  }
+  .guestbook-summary-btn{
+    padding:10px 20px;
+    background:transparent;
+    border:1px solid var(--sea);
+    color:var(--sea);
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:.9rem;
+    font-weight:600;
+    letter-spacing:.02em;
+    cursor:pointer;
+  }
+  .guestbook-summary-btn:hover{ background:var(--sea); color:var(--surface); }
+  .guestbook-summary-btn:disabled{ opacity:.6; cursor:default; }
+  .guestbook-summary-text{
+    margin-block-start:14px;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    max-width:60ch;
+  }
 
   /* ---------- closing ---------- */
   .closing{
@@ -455,6 +478,10 @@
           </ul>
         </div>
       </div>
+      <div class="guestbook-summary">
+        <button type="button" class="guestbook-summary-btn" id="gb-summary-btn">AI 一句話總結</button>
+        <p class="guestbook-summary-text" id="gb-summary-text"></p>
+      </div>
     </section>
 
   </main>
@@ -578,5 +605,31 @@
   });
 
   loadMessages();
+
+  var summaryBtn = document.getElementById('gb-summary-btn');
+  var summaryText = document.getElementById('gb-summary-text');
+
+  summaryBtn.addEventListener('click', function(){
+    var originalLabel = summaryBtn.textContent;
+    summaryBtn.disabled = true;
+    summaryBtn.textContent = '統整中…';
+    summaryText.textContent = '';
+
+    fetch('/api/summary', { method: 'POST' })
+      .then(function(res){
+        if(!res.ok) throw new Error('summary failed');
+        return res.json();
+      })
+      .then(function(data){
+        summaryText.textContent = data.summary || '';
+      })
+      .catch(function(){
+        summaryText.textContent = 'AI 總結暫時無法使用,稍後再試試。';
+      })
+      .finally(function(){
+        summaryBtn.disabled = false;
+        summaryBtn.textContent = originalLabel;
+      });
+  });
 })();
 </script>
