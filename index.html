@@ -1,0 +1,349 @@
+<title>Flora 甜點研究室</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Literata:ital,opsz,wght@0,14..72,300..600;1,14..72,400..500&display=swap">
+<style>
+  :root{
+    --bg:#F8E9DC;
+    --bg-alt:#F1D9C4;
+    --surface:#FFF8F0;
+    --ink:#3A2A20;
+    --ink-soft:#6B5142;
+    --accent:#D8564A;
+    --accent-2:#E0913F;
+    --sea:#3E7C78;
+    --line: rgba(58,42,32,.18);
+    --shadow: rgba(58,42,32,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#241811;
+      --bg-alt:#2E2018;
+      --surface:#2C1E16;
+      --ink:#F3E3D3;
+      --ink-soft:#C7AE99;
+      --accent:#F0785F;
+      --accent-2:#F0AE5C;
+      --sea:#6FB3AC;
+      --line: rgba(243,227,211,.16);
+      --shadow: rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#241811;
+    --bg-alt:#2E2018;
+    --surface:#2C1E16;
+    --ink:#F3E3D3;
+    --ink-soft:#C7AE99;
+    --accent:#F0785F;
+    --accent-2:#F0AE5C;
+    --sea:#6FB3AC;
+    --line: rgba(243,227,211,.16);
+    --shadow: rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Literata", Georgia, "Noto Serif TC", serif;
+    line-height:1.7;
+    font-size:16px;
+  }
+  h1,h2,h3,.eyebrow,.mark{
+    font-family:"Bricolage Grotesque", "Noto Sans TC", system-ui, sans-serif;
+  }
+  h1,h2,h3{ text-wrap:balance; margin:0; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  ::selection{ background:var(--accent); color:var(--surface); }
+
+  .page{ padding-inline: clamp(20px, 6vw, 96px); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:var(--ink);
+    color:var(--bg);
+    margin-inline: calc(-1 * clamp(20px, 6vw, 96px));
+    padding-inline: clamp(20px, 6vw, 96px);
+    padding-block: clamp(28px, 6vw, 56px) 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+    flex-wrap:wrap;
+    padding-block-end: clamp(32px, 8vw, 72px);
+  }
+  .mark{
+    font-size:.8rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.75;
+  }
+  .eyebrow{
+    font-size:.78rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    font-weight:600;
+  }
+  .hero-name{
+    font-size:clamp(3.4rem, 13vw, 9.5rem);
+    font-weight:700;
+    line-height:.92;
+    letter-spacing:-.01em;
+    margin-block: .3em 0;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(24px, 5vw, 64px);
+    align-items:end;
+    padding-block-end: clamp(48px, 8vw, 88px);
+  }
+  .hero-role{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:clamp(1.1rem, 2.4vw, 1.5rem);
+    font-weight:500;
+  }
+  .hero-tagline{
+    font-size:1.05rem;
+    color: color-mix(in srgb, var(--bg) 82%, transparent);
+    max-width:32ch;
+    font-style:italic;
+  }
+  .hero-wave{ display:block; width:100%; height:auto; }
+  @media (max-width: 640px){
+    .hero-grid{ grid-template-columns: 1fr; align-items:start; }
+  }
+
+  /* ---------- section shells ---------- */
+  section{ padding-block: clamp(56px, 10vw, 108px); }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:18px;
+    margin-block-end: clamp(28px, 5vw, 48px);
+    border-bottom:1px solid var(--line);
+    padding-block-end:14px;
+  }
+  .section-num{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:.85rem;
+    color:var(--accent);
+    letter-spacing:.08em;
+  }
+  .section-title{
+    font-size:clamp(1.6rem, 3.4vw, 2.3rem);
+    font-weight:600;
+  }
+
+  /* ---------- about ---------- */
+  .about{ background:var(--bg-alt); margin-inline: calc(-1 * clamp(20px, 6vw, 96px)); padding-inline: clamp(20px, 6vw, 96px); }
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(32px, 6vw, 72px);
+  }
+  .about-lede{
+    font-size:clamp(1.15rem, 2.2vw, 1.45rem);
+    font-weight:400;
+  }
+  .about-lede .accent{ color:var(--accent); font-style:italic; }
+  .facts{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:18px; }
+  .facts > div{
+    display:grid;
+    grid-template-columns: 6.5em 1fr;
+    gap:14px;
+    padding-block-end:16px;
+    border-bottom:1px solid var(--line);
+    font-size:.98rem;
+  }
+  .facts > div:last-child{ border-bottom:none; padding-block-end:0; }
+  .facts dt{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:.78rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  @media (max-width: 720px){
+    .about-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- inspirations ---------- */
+  .inspire-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 5vw, 56px);
+  }
+  .inspire-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding: clamp(24px, 4vw, 36px);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .inspire-icon{ width:34px; height:34px; color:var(--sea); }
+  .inspire-card h3{ font-size:1.3rem; font-weight:600; }
+  .inspire-card p{ color:var(--ink-soft); font-size:.98rem; }
+  .inspire-card:nth-child(2) .inspire-icon{ color:var(--accent); }
+  @media (max-width: 720px){
+    .inspire-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- philosophy strip ---------- */
+  .strip{
+    display:flex;
+    gap:clamp(20px,4vw,40px);
+    flex-wrap:wrap;
+    padding-block-start: clamp(36px,6vw,56px);
+  }
+  .strip span{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:.8rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding-block-end:8px;
+    border-bottom:2px solid var(--accent-2);
+  }
+
+  /* ---------- closing ---------- */
+  .closing{
+    background:var(--ink);
+    color:var(--bg);
+    margin-inline: calc(-1 * clamp(20px, 6vw, 96px));
+    padding-inline: clamp(20px, 6vw, 96px);
+    padding-block: clamp(64px, 10vw, 120px) clamp(32px, 6vw, 56px);
+  }
+  .closing-title{
+    font-size:clamp(2rem, 5vw, 3.4rem);
+    font-weight:700;
+    max-width:16ch;
+  }
+  .closing-body{
+    margin-block-start:20px;
+    max-width:48ch;
+    font-size:1.05rem;
+    color: color-mix(in srgb, var(--bg) 80%, transparent);
+  }
+  .closing-foot{
+    margin-block-start: clamp(48px,8vw,72px);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    padding-block-start:20px;
+    border-top:1px solid color-mix(in srgb, var(--bg) 25%, transparent);
+    font-size:.85rem;
+    letter-spacing:.04em;
+    color: color-mix(in srgb, var(--bg) 65%, transparent);
+  }
+</style>
+
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-top">
+      <span class="mark">Flora</span>
+      <span class="mark">食品甜點研發顧問</span>
+    </div>
+
+    <div class="eyebrow">Pastry &amp; Flavor Development Consultant</div>
+    <h1 class="hero-name">Flora</h1>
+
+    <div class="hero-grid">
+      <p class="hero-role">食品甜點研發顧問,把海潮與四季的節奏,轉譯成餐桌上的甜點語言。</p>
+      <p class="hero-tagline">靈感從不在辦公室裡誕生——它在退潮後的沙灘上,在森林濕潤的空氣裡。</p>
+    </div>
+
+    <svg class="hero-wave" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,60 C150,10 300,90 450,55 C600,20 750,85 900,50 C1050,15 1150,70 1200,45 L1200,90 L0,90 Z" fill="var(--bg-alt)"></path>
+    </svg>
+  </header>
+
+  <main>
+
+    <section class="about" id="about">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2 class="section-title">關於 Flora</h2>
+      </div>
+      <div class="about-grid">
+        <p class="about-lede">
+          Flora 專注於甜點與風味的研發顧問工作,從食材本身的個性出發,
+          打造<span class="accent">層次分明、有記憶點</span>的甜點體驗。
+          她長年往返於實驗室與海邊之間,相信最誠實的靈感,往往來自最安靜的地方——
+          一次退潮、一場季節交替,或是果實成熟前最後的青澀氣味。
+        </p>
+        <dl class="facts">
+          <div><dt>專長</dt><dd>風味設計、質地調校、季節限定甜點開發</dd></div>
+          <div><dt>合作對象</dt><dd>甜點品牌、餐飲空間、食品公司</dd></div>
+          <div><dt>工作方式</dt><dd>從概念發想到量產測試,全程參與陪跑</dd></div>
+          <div><dt>靈感來源</dt><dd>海洋、潮汐、山林、當令食材</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="inspirations" id="inspirations">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2 class="section-title">靈感的兩個座標</h2>
+      </div>
+      <div class="inspire-grid">
+        <article class="inspire-card">
+          <svg class="inspire-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M3 24c3-4 7-4 10 0s7 4 10 0 7-4 10 0 3 3 3 3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M3 31c3-4 7-4 10 0s7 4 10 0 7-4 10 0 3 3 3 3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
+            <circle cx="30" cy="10" r="4.2" stroke="currentColor" stroke-width="2.2"/>
+          </svg>
+          <h3>海洋</h3>
+          <p>
+            潮汐有自己的節奏——遲緩、循環、從不著急。Flora 常在退潮後的沙灘上尋找靈感:
+            鹽的鹹、風的乾、浪打上岸留下的濕氣,這些感受最終會化成一道甜點裡
+            看不見、卻嚐得到的細節。
+          </p>
+        </article>
+        <article class="inspire-card">
+          <svg class="inspire-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M20 5c9 3 13 11 10 20-3 8-11 11-18 8 2-9 3-19 8-28z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M20 8v27" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          <h3>大自然</h3>
+          <p>
+            森林的濕度、果實成熟的氣味、季節轉換時空氣裡的變化,都是她配方筆記本裡
+            重要的一頁。比起追逐流行口味,她更習慣跟著自然的時序走,
+            讓每一款甜點都留下當下季節的痕跡。
+          </p>
+        </article>
+      </div>
+      <div class="strip">
+        <span>季節限定</span>
+        <span>風味敘事</span>
+        <span>質地實驗</span>
+        <span>在地食材</span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="closing" id="contact">
+    <h2 class="closing-title">一起把想法,端上桌。</h2>
+    <p class="closing-body">
+      無論是新品開發、風味顧問,或是甜點品牌的長期合作,
+      都歡迎與 Flora 聊聊你手上的想法——從一顆果實,或一片海開始都可以。
+    </p>
+    <div class="closing-foot">
+      <span>Flora ・ 食品甜點研發顧問</span>
+      <span>Inspired by the sea &amp; nature</span>
+    </div>
+  </footer>
+
+</div>
