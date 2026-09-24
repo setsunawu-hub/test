@@ -51,12 +51,18 @@ app.post('/api/messages', (req, res) => {
 const ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
 
 app.post('/api/summary', async (req, res) => {
+  const lang = req.body?.lang === 'en' ? 'en' : 'zh';
+
   const rows = db
     .prepare('SELECT name, message FROM messages ORDER BY id DESC LIMIT 200')
     .all();
 
   if (!rows.length) {
-    return res.json({ summary: '目前還沒有留言可以總結。' });
+    return res.json({
+      summary: lang === 'en'
+        ? 'There are no messages to summarize yet.'
+        : '目前還沒有留言可以總結。',
+    });
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -65,7 +71,9 @@ app.post('/api/summary', async (req, res) => {
   }
 
   const list = rows.map((r) => `${r.name}:${r.message}`).join('\n');
-  const prompt = `以下是網站留言板上的訪客留言,請用一句繁體中文總結這些留言的整體氣氛或重點。只回傳一句話,不要加引號、前言或其他說明。\n\n${list}`;
+  const prompt = lang === 'en'
+    ? `Below are guest messages left on a website's guestbook. Summarize their overall mood or key themes in exactly one sentence, in English. Reply with only that sentence — no quotes, preamble, or explanation.\n\n${list}`
+    : `以下是網站留言板上的訪客留言,請用一句繁體中文總結這些留言的整體氣氛或重點。只回傳一句話,不要加引號、前言或其他說明。\n\n${list}`;
 
   try {
     const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
@@ -95,7 +103,9 @@ app.post('/api/summary', async (req, res) => {
       .join('')
       .trim();
 
-    res.json({ summary: summary || '目前無法產生總結。' });
+    res.json({
+      summary: summary || (lang === 'en' ? 'No summary is available right now.' : '目前無法產生總結。'),
+    });
   } catch (err) {
     console.error('Anthropic API request error:', err);
     res.status(502).json({ error: 'AI summary request failed' });
