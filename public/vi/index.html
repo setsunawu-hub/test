@@ -246,16 +246,24 @@
   .portfolio-item-head h3{ font-size:1.15rem; font-weight:600; }
   .portfolio-item-desc{ color:var(--ink-soft); font-size:.98rem; max-width:72ch; }
   .portfolio-item-products{
-    margin-block-start:12px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    margin-block-start:16px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap:14px;
   }
-  .portfolio-item-products span{
-    font-size:.82rem;
-    padding:4px 10px;
-    background:var(--surface);
+  .portfolio-item-products figure{ margin:0; }
+  .portfolio-item-products img{
+    display:block;
+    width:100%;
+    aspect-ratio: 3 / 4;
+    object-fit:cover;
     border:1px solid var(--line);
+    background:var(--surface);
+  }
+  .portfolio-item-products figcaption{
+    margin-block-start:6px;
+    font-size:.78rem;
+    line-height:1.3;
     color:var(--ink-soft);
   }
 
@@ -537,11 +545,11 @@
             bằng hương vị để phù hợp với thị trường tráng miệng cao cấp.
           </p>
           <div class="portfolio-item-products">
-            <span>Bánh phô mai Basque sô-cô-la</span>
-            <span>Bánh sô-cô-la tươi</span>
-            <span>Bánh ganache sô-cô-la</span>
-            <span>Bánh madeleine phủ sô-cô-la</span>
-            <span>Thanh sô-cô-la hạt phỉ</span>
+            <figure><img src="/images/portfolio/choc-basque-cheesecake.jpg" alt="Bánh phô mai Basque sô-cô-la" loading="lazy"><figcaption>Bánh phô mai Basque sô-cô-la</figcaption></figure>
+            <figure><img src="/images/portfolio/raw-chocolate-cake.jpg" alt="Bánh sô-cô-la tươi" loading="lazy"><figcaption>Bánh sô-cô-la tươi</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-ganache-cake.jpg" alt="Bánh ganache sô-cô-la" loading="lazy"><figcaption>Bánh ganache sô-cô-la</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-madeleines.jpg" alt="Bánh madeleine phủ sô-cô-la" loading="lazy"><figcaption>Bánh madeleine phủ sô-cô-la</figcaption></figure>
+            <figure><img src="/images/portfolio/hazelnut-chocolate-bar.jpg" alt="Thanh sô-cô-la hạt phỉ" loading="lazy"><figcaption>Thanh sô-cô-la hạt phỉ</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -556,7 +564,7 @@
             và kết cấu nhiều tầng lớp, đồng thời cân bằng giữa tính thẩm mỹ và hương vị.
           </p>
           <div class="portfolio-item-products">
-            <span>Bộ sưu tập bonbon sô-cô-la đa hương vị</span>
+            <figure><img src="/images/portfolio/chocolate-bonbon.jpg" alt="Bộ sưu tập bonbon sô-cô-la đa hương vị" loading="lazy"><figcaption>Bộ sưu tập bonbon sô-cô-la đa hương vị</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -571,10 +579,10 @@
             và vị giác.
           </p>
           <div class="portfolio-item-products">
-            <span>Bánh tart mini đường hổ phách</span>
-            <span>Ly mousse trà đen "Mắt hổ"</span>
-            <span>Bánh kem dứa thơm</span>
-            <span>Bánh cà rốt kiểu Mỹ</span>
+            <figure><img src="/images/portfolio/amber-sugar-tart.jpg" alt="Bánh tart mini đường hổ phách" loading="lazy"><figcaption>Bánh tart mini đường hổ phách</figcaption></figure>
+            <figure><img src="/images/portfolio/tiger-eye-tea-mousse.jpg" alt="Ly mousse trà đen &quot;Mắt hổ&quot;" loading="lazy"><figcaption>Ly mousse trà đen "Mắt hổ"</figcaption></figure>
+            <figure><img src="/images/portfolio/pandan-cream-cake.jpg" alt="Bánh kem dứa thơm" loading="lazy"><figcaption>Bánh kem dứa thơm</figcaption></figure>
+            <figure><img src="/images/portfolio/american-carrot-cake.jpg" alt="Bánh cà rốt kiểu Mỹ" loading="lazy"><figcaption>Bánh cà rốt kiểu Mỹ</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -589,9 +597,9 @@
             vị đại chúng.
           </p>
           <div class="portfolio-item-products">
-            <span>Bánh phô mai matcha hai lớp</span>
-            <span>Bánh mousse sô-cô-la &amp; lý chua đen</span>
-            <span>Các loại bánh canelé</span>
+            <figure><img src="/images/portfolio/matcha-cheesecake.jpg" alt="Bánh phô mai matcha hai lớp" loading="lazy"><figcaption>Bánh phô mai matcha hai lớp</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-blackcurrant-mousse.jpg" alt="Bánh mousse sô-cô-la &amp; lý chua đen" loading="lazy"><figcaption>Bánh mousse sô-cô-la &amp; lý chua đen</figcaption></figure>
+            <figure><img src="/images/portfolio/canele.jpg" alt="Các loại bánh canelé" loading="lazy"><figcaption>Các loại bánh canelé</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -605,8 +613,8 @@
             vị thanh mát để bữa ăn kết thúc thật sảng khoái.
           </p>
           <div class="portfolio-item-products">
-            <span>Kem que trái cây tươi Đài Loan &amp; mứt trái cây</span>
-            <span>Bánh su nhân đôi</span>
+            <figure><img src="/images/portfolio/fruit-ice-bars.jpg" alt="Kem que trái cây tươi Đài Loan &amp; mứt trái cây" loading="lazy"><figcaption>Kem que trái cây tươi Đài Loan &amp; mứt trái cây</figcaption></figure>
+            <figure><img src="/images/portfolio/double-filled-choux.jpg" alt="Bánh su nhân đôi" loading="lazy"><figcaption>Bánh su nhân đôi</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -620,8 +628,8 @@
             vừa đảm bảo độ hoàn thiện và tính thương mại của món tráng miệng.
           </p>
           <div class="portfolio-item-products">
-            <span>Bánh phô mai tươi kiwi vàng</span>
-            <span>Bánh kem chantilly dâu tây</span>
+            <figure><img src="/images/portfolio/kiwi-cheesecake.jpg" alt="Bánh phô mai tươi kiwi vàng" loading="lazy"><figcaption>Bánh phô mai tươi kiwi vàng</figcaption></figure>
+            <figure><img src="/images/portfolio/strawberry-chantilly-cake.jpg" alt="Bánh kem chantilly dâu tây" loading="lazy"><figcaption>Bánh kem chantilly dâu tây</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -636,8 +644,8 @@
             hoàn toàn mới, xóa nhòa ranh giới giữa tráng miệng và nguyên liệu cao cấp.
           </p>
           <div class="portfolio-item-products">
-            <span>Bánh mousse phô mai trứng cá muối (mini)</span>
-            <span>Bánh mousse phô mai trứng cá muối</span>
+            <figure><img src="/images/portfolio/caviar-mousse-mini.jpg" alt="Bánh mousse phô mai trứng cá muối (mini)" loading="lazy"><figcaption>Bánh mousse phô mai trứng cá muối (mini)</figcaption></figure>
+            <figure><img src="/images/portfolio/caviar-mousse-cake.jpg" alt="Bánh mousse phô mai trứng cá muối" loading="lazy"><figcaption>Bánh mousse phô mai trứng cá muối</figcaption></figure>
           </div>
         </li>
       </ul>

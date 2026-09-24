@@ -251,16 +251,24 @@
   .portfolio-item-head h3{ font-size:1.15rem; font-weight:600; }
   .portfolio-item-desc{ color:var(--ink-soft); font-size:.98rem; max-width:72ch; }
   .portfolio-item-products{
-    margin-block-start:12px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    margin-block-start:16px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap:14px;
   }
-  .portfolio-item-products span{
-    font-size:.82rem;
-    padding:4px 10px;
-    background:var(--surface);
+  .portfolio-item-products figure{ margin:0; }
+  .portfolio-item-products img{
+    display:block;
+    width:100%;
+    aspect-ratio: 3 / 4;
+    object-fit:cover;
     border:1px solid var(--line);
+    background:var(--surface);
+  }
+  .portfolio-item-products figcaption{
+    margin-block-start:6px;
+    font-size:.78rem;
+    line-height:1.3;
     color:var(--ink-soft);
   }
 
@@ -539,11 +547,11 @@
             texture and flavor balance to suit a premium dessert market.
           </p>
           <div class="portfolio-item-products">
-            <span>Chocolate Basque Cheesecake</span>
-            <span>Raw Chocolate Cake</span>
-            <span>Chocolate Ganache Cake</span>
-            <span>Chocolate-Dipped Madeleines</span>
-            <span>Hazelnut Chocolate Bar</span>
+            <figure><img src="/images/portfolio/choc-basque-cheesecake.jpg" alt="Chocolate Basque Cheesecake" loading="lazy"><figcaption>Chocolate Basque Cheesecake</figcaption></figure>
+            <figure><img src="/images/portfolio/raw-chocolate-cake.jpg" alt="Raw Chocolate Cake" loading="lazy"><figcaption>Raw Chocolate Cake</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-ganache-cake.jpg" alt="Chocolate Ganache Cake" loading="lazy"><figcaption>Chocolate Ganache Cake</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-madeleines.jpg" alt="Chocolate-Dipped Madeleines" loading="lazy"><figcaption>Chocolate-Dipped Madeleines</figcaption></figure>
+            <figure><img src="/images/portfolio/hazelnut-chocolate-bar.jpg" alt="Hazelnut Chocolate Bar" loading="lazy"><figcaption>Hazelnut Chocolate Bar</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -557,7 +565,7 @@
             handmade confections with equal attention to flavor and visual finish.
           </p>
           <div class="portfolio-item-products">
-            <span>Multi-Flavor Chocolate Bonbon Collection</span>
+            <figure><img src="/images/portfolio/chocolate-bonbon.jpg" alt="Multi-Flavor Chocolate Bonbon Collection" loading="lazy"><figcaption>Multi-Flavor Chocolate Bonbon Collection</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -570,10 +578,10 @@
             and shape of the jewelry itself to create a line of custom, brand-driven desserts.
           </p>
           <div class="portfolio-item-products">
-            <span>Amber Sugar Mini Tarts</span>
-            <span>"Tiger's Eye" Black Tea Mousse Cups</span>
-            <span>Pandan Chantilly Cake</span>
-            <span>American-Style Carrot Cake</span>
+            <figure><img src="/images/portfolio/amber-sugar-tart.jpg" alt="Amber Sugar Mini Tarts" loading="lazy"><figcaption>Amber Sugar Mini Tarts</figcaption></figure>
+            <figure><img src="/images/portfolio/tiger-eye-tea-mousse.jpg" alt="&quot;Tiger's Eye&quot; Black Tea Mousse Cups" loading="lazy"><figcaption>"Tiger's Eye" Black Tea Mousse Cups</figcaption></figure>
+            <figure><img src="/images/portfolio/pandan-cream-cake.jpg" alt="Pandan Chantilly Cake" loading="lazy"><figcaption>Pandan Chantilly Cake</figcaption></figure>
+            <figure><img src="/images/portfolio/american-carrot-cake.jpg" alt="American-Style Carrot Cake" loading="lazy"><figcaption>American-Style Carrot Cake</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -587,9 +595,9 @@
             appealing flavor.
           </p>
           <div class="portfolio-item-products">
-            <span>Double-Layer Matcha Cheesecake</span>
-            <span>Chocolate &amp; Blackcurrant Mousse Cake</span>
-            <span>Assorted Canelés</span>
+            <figure><img src="/images/portfolio/matcha-cheesecake.jpg" alt="Double-Layer Matcha Cheesecake" loading="lazy"><figcaption>Double-Layer Matcha Cheesecake</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-blackcurrant-mousse.jpg" alt="Chocolate &amp; Blackcurrant Mousse Cake" loading="lazy"><figcaption>Chocolate &amp; Blackcurrant Mousse Cake</figcaption></figure>
+            <figure><img src="/images/portfolio/canele.jpg" alt="Assorted Canelés" loading="lazy"><figcaption>Assorted Canelés</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -602,8 +610,8 @@
             designed as a clean finish to a meal, with visual details that add a sense of play.
           </p>
           <div class="portfolio-item-products">
-            <span>Taiwan Fresh Fruit Ice Bars &amp; Jam</span>
-            <span>Double-Filled Choux</span>
+            <figure><img src="/images/portfolio/fruit-ice-bars.jpg" alt="Taiwan Fresh Fruit Ice Bars &amp; Jam" loading="lazy"><figcaption>Taiwan Fresh Fruit Ice Bars &amp; Jam</figcaption></figure>
+            <figure><img src="/images/portfolio/double-filled-choux.jpg" alt="Double-Filled Choux" loading="lazy"><figcaption>Double-Filled Choux</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -617,8 +625,8 @@
             retail-ready dessert.
           </p>
           <div class="portfolio-item-products">
-            <span>Golden Kiwi Raw Cheesecake</span>
-            <span>Strawberry Chantilly Cake</span>
+            <figure><img src="/images/portfolio/kiwi-cheesecake.jpg" alt="Golden Kiwi Raw Cheesecake" loading="lazy"><figcaption>Golden Kiwi Raw Cheesecake</figcaption></figure>
+            <figure><img src="/images/portfolio/strawberry-chantilly-cake.jpg" alt="Strawberry Chantilly Cake" loading="lazy"><figcaption>Strawberry Chantilly Cake</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -632,8 +640,8 @@
             between dessert and fine ingredient.
           </p>
           <div class="portfolio-item-products">
-            <span>Caviar Cheese Mousse Cake (Mini)</span>
-            <span>Caviar Cheese Mousse Cake</span>
+            <figure><img src="/images/portfolio/caviar-mousse-mini.jpg" alt="Caviar Cheese Mousse Cake (Mini)" loading="lazy"><figcaption>Caviar Cheese Mousse Cake (Mini)</figcaption></figure>
+            <figure><img src="/images/portfolio/caviar-mousse-cake.jpg" alt="Caviar Cheese Mousse Cake" loading="lazy"><figcaption>Caviar Cheese Mousse Cake</figcaption></figure>
           </div>
         </li>
       </ul>

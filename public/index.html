@@ -251,16 +251,24 @@
   .portfolio-item-head h3{ font-size:1.15rem; font-weight:600; }
   .portfolio-item-desc{ color:var(--ink-soft); font-size:.98rem; max-width:72ch; }
   .portfolio-item-products{
-    margin-block-start:12px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    margin-block-start:16px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap:14px;
   }
-  .portfolio-item-products span{
-    font-size:.82rem;
-    padding:4px 10px;
-    background:var(--surface);
+  .portfolio-item-products figure{ margin:0; }
+  .portfolio-item-products img{
+    display:block;
+    width:100%;
+    aspect-ratio: 3 / 4;
+    object-fit:cover;
     border:1px solid var(--line);
+    background:var(--surface);
+  }
+  .portfolio-item-products figcaption{
+    margin-block-start:6px;
+    font-size:.78rem;
+    line-height:1.3;
     color:var(--ink-soft);
   }
 
@@ -538,11 +546,11 @@
             建構出符合高端甜點市場需求的產品陣容。
           </p>
           <div class="portfolio-item-products">
-            <span>巧克力巴斯克乳酪蛋糕</span>
-            <span>生巧克力蛋糕</span>
-            <span>巧克力甘納許蛋糕</span>
-            <span>巧克力裹瑪德蓮</span>
-            <span>榛果巧克力片</span>
+            <figure><img src="/images/portfolio/choc-basque-cheesecake.jpg" alt="巧克力巴斯克乳酪蛋糕" loading="lazy"><figcaption>巧克力巴斯克乳酪蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/raw-chocolate-cake.jpg" alt="生巧克力蛋糕" loading="lazy"><figcaption>生巧克力蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-ganache-cake.jpg" alt="巧克力甘納許蛋糕" loading="lazy"><figcaption>巧克力甘納許蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-madeleines.jpg" alt="巧克力裹瑪德蓮" loading="lazy"><figcaption>巧克力裹瑪德蓮</figcaption></figure>
+            <figure><img src="/images/portfolio/hazelnut-chocolate-bar.jpg" alt="榛果巧克力片" loading="lazy"><figcaption>榛果巧克力片</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -556,7 +564,7 @@
             同時兼顧視覺完成度與風味平衡。
           </p>
           <div class="portfolio-item-products">
-            <span>多口味巧克力邦邦(bonbon)系列</span>
+            <figure><img src="/images/portfolio/chocolate-bonbon.jpg" alt="多口味巧克力邦邦(bonbon)系列" loading="lazy"><figcaption>多口味巧克力邦邦(bonbon)系列</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -569,10 +577,10 @@
             每款產品從珠寶的色澤、質地與造型中汲取靈感,以視覺與味覺同步呈現品牌故事。
           </p>
           <div class="portfolio-item-products">
-            <span>琥珀糖迷你小塔</span>
-            <span>虎眼石紅茶慕斯杯</span>
-            <span>香蘭鮮奶油蛋糕</span>
-            <span>美式胡蘿蔔蛋糕</span>
+            <figure><img src="/images/portfolio/amber-sugar-tart.jpg" alt="琥珀糖迷你小塔" loading="lazy"><figcaption>琥珀糖迷你小塔</figcaption></figure>
+            <figure><img src="/images/portfolio/tiger-eye-tea-mousse.jpg" alt="虎眼石紅茶慕斯杯" loading="lazy"><figcaption>虎眼石紅茶慕斯杯</figcaption></figure>
+            <figure><img src="/images/portfolio/pandan-cream-cake.jpg" alt="香蘭鮮奶油蛋糕" loading="lazy"><figcaption>香蘭鮮奶油蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/american-carrot-cake.jpg" alt="美式胡蘿蔔蛋糕" loading="lazy"><figcaption>美式胡蘿蔔蛋糕</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -585,9 +593,9 @@
             設計時同步考量製作工序、保存穩定性與出餐便利性,兼顧潮流視覺與大眾口味的平衡。
           </p>
           <div class="portfolio-item-products">
-            <span>雙層抹茶乳酪蛋糕</span>
-            <span>巧克力黑醋栗慕斯蛋糕</span>
-            <span>各種口味可麗露</span>
+            <figure><img src="/images/portfolio/matcha-cheesecake.jpg" alt="雙層抹茶乳酪蛋糕" loading="lazy"><figcaption>雙層抹茶乳酪蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-blackcurrant-mousse.jpg" alt="巧克力黑醋栗慕斯蛋糕" loading="lazy"><figcaption>巧克力黑醋栗慕斯蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/canele.jpg" alt="各種口味可麗露" loading="lazy"><figcaption>各種口味可麗露</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -600,8 +608,8 @@
             以輕盈口感與清爽風味為核心設計,讓餐後收尾更加清新,並融入視覺巧思與趣味性。
           </p>
           <div class="portfolio-item-products">
-            <span>台灣鮮果冰棒及果醬</span>
-            <span>雙餡泡芙</span>
+            <figure><img src="/images/portfolio/fruit-ice-bars.jpg" alt="台灣鮮果冰棒及果醬" loading="lazy"><figcaption>台灣鮮果冰棒及果醬</figcaption></figure>
+            <figure><img src="/images/portfolio/double-filled-choux.jpg" alt="雙餡泡芙" loading="lazy"><figcaption>雙餡泡芙</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -614,8 +622,8 @@
             在最大程度保留原料鮮度與風味的同時,兼顧甜點的完成度與商品性,提升農產品的附加價值。
           </p>
           <div class="portfolio-item-products">
-            <span>黃金奇異果生乳酪蛋糕</span>
-            <span>草莓香堤蛋糕</span>
+            <figure><img src="/images/portfolio/kiwi-cheesecake.jpg" alt="黃金奇異果生乳酪蛋糕" loading="lazy"><figcaption>黃金奇異果生乳酪蛋糕</figcaption></figure>
+            <figure><img src="/images/portfolio/strawberry-chantilly-cake.jpg" alt="草莓香堤蛋糕" loading="lazy"><figcaption>草莓香堤蛋糕</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -628,8 +636,8 @@
             將魚子醬的鹹鮮回甘與乳酪慕斯的細緻口感巧妙融合,打造出突破甜點與高端食材界線的全新美食體驗。
           </p>
           <div class="portfolio-item-products">
-            <span>魚子醬乳酪慕斯蛋糕(迷你款)</span>
-            <span>魚子醬乳酪慕斯蛋糕</span>
+            <figure><img src="/images/portfolio/caviar-mousse-mini.jpg" alt="魚子醬乳酪慕斯蛋糕(迷你款)" loading="lazy"><figcaption>魚子醬乳酪慕斯蛋糕(迷你款)</figcaption></figure>
+            <figure><img src="/images/portfolio/caviar-mousse-cake.jpg" alt="魚子醬乳酪慕斯蛋糕" loading="lazy"><figcaption>魚子醬乳酪慕斯蛋糕</figcaption></figure>
           </div>
         </li>
       </ul>

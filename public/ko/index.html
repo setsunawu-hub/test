@@ -246,16 +246,24 @@
   .portfolio-item-head h3{ font-size:1.15rem; font-weight:600; }
   .portfolio-item-desc{ color:var(--ink-soft); font-size:.98rem; max-width:72ch; }
   .portfolio-item-products{
-    margin-block-start:12px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    margin-block-start:16px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap:14px;
   }
-  .portfolio-item-products span{
-    font-size:.82rem;
-    padding:4px 10px;
-    background:var(--surface);
+  .portfolio-item-products figure{ margin:0; }
+  .portfolio-item-products img{
+    display:block;
+    width:100%;
+    aspect-ratio: 3 / 4;
+    object-fit:cover;
     border:1px solid var(--line);
+    background:var(--surface);
+  }
+  .portfolio-item-products figcaption{
+    margin-block-start:6px;
+    font-size:.78rem;
+    line-height:1.3;
     color:var(--ink-soft);
   }
 
@@ -534,11 +542,11 @@
             식감 구조와 풍미 밸런스를 설계하여 프리미엄 디저트 시장에 적합한 제품 라인업을 구축하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>초콜릿 바스크 치즈케이크</span>
-            <span>생초콜릿 케이크</span>
-            <span>초콜릿 가나슈 케이크</span>
-            <span>초콜릿 코팅 마들렌</span>
-            <span>헤이즐넛 초콜릿 바</span>
+            <figure><img src="/images/portfolio/choc-basque-cheesecake.jpg" alt="초콜릿 바스크 치즈케이크" loading="lazy"><figcaption>초콜릿 바스크 치즈케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/raw-chocolate-cake.jpg" alt="생초콜릿 케이크" loading="lazy"><figcaption>생초콜릿 케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-ganache-cake.jpg" alt="초콜릿 가나슈 케이크" loading="lazy"><figcaption>초콜릿 가나슈 케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-madeleines.jpg" alt="초콜릿 코팅 마들렌" loading="lazy"><figcaption>초콜릿 코팅 마들렌</figcaption></figure>
+            <figure><img src="/images/portfolio/hazelnut-chocolate-bar.jpg" alt="헤이즐넛 초콜릿 바" loading="lazy"><figcaption>헤이즐넛 초콜릿 바</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -553,7 +561,7 @@
             핸드메이드 초콜릿 라인업을 구축하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>다양한 플레이버의 초콜릿 봉봉</span>
+            <figure><img src="/images/portfolio/chocolate-bonbon.jpg" alt="다양한 플레이버의 초콜릿 봉봉" loading="lazy"><figcaption>다양한 플레이버의 초콜릿 봉봉</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -567,10 +575,10 @@
             시각적·미각적으로 구현하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>호박당(琥珀糖) 미니 타르트</span>
-            <span>타이거아이 콘셉트 홍차 무스 컵</span>
-            <span>판단 생크림 케이크</span>
-            <span>아메리칸 스타일 캐롯 케이크</span>
+            <figure><img src="/images/portfolio/amber-sugar-tart.jpg" alt="호박당(琥珀糖) 미니 타르트" loading="lazy"><figcaption>호박당(琥珀糖) 미니 타르트</figcaption></figure>
+            <figure><img src="/images/portfolio/tiger-eye-tea-mousse.jpg" alt="타이거아이 콘셉트 홍차 무스 컵" loading="lazy"><figcaption>타이거아이 콘셉트 홍차 무스 컵</figcaption></figure>
+            <figure><img src="/images/portfolio/pandan-cream-cake.jpg" alt="판단 생크림 케이크" loading="lazy"><figcaption>판단 생크림 케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/american-carrot-cake.jpg" alt="아메리칸 스타일 캐롯 케이크" loading="lazy"><figcaption>아메리칸 스타일 캐롯 케이크</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -584,9 +592,9 @@
             맛의 밸런스를 고려하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>더블 레이어 말차 치즈케이크</span>
-            <span>초콜릿 &amp; 블랙커런트 무스 케이크</span>
-            <span>다양한 플레이버의 까눌레</span>
+            <figure><img src="/images/portfolio/matcha-cheesecake.jpg" alt="더블 레이어 말차 치즈케이크" loading="lazy"><figcaption>더블 레이어 말차 치즈케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-blackcurrant-mousse.jpg" alt="초콜릿 &amp; 블랙커런트 무스 케이크" loading="lazy"><figcaption>초콜릿 &amp; 블랙커런트 무스 케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/canele.jpg" alt="다양한 플레이버의 까눌레" loading="lazy"><figcaption>다양한 플레이버의 까눌레</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -600,8 +608,8 @@
             마무리할 수 있도록 하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>대만산 신선 과일 아이스바 및 과일 잼</span>
-            <span>더블 필링 슈(泡芙)</span>
+            <figure><img src="/images/portfolio/fruit-ice-bars.jpg" alt="대만산 신선 과일 아이스바 및 과일 잼" loading="lazy"><figcaption>대만산 신선 과일 아이스바 및 과일 잼</figcaption></figure>
+            <figure><img src="/images/portfolio/double-filled-choux.jpg" alt="더블 필링 슈(泡芙)" loading="lazy"><figcaption>더블 필링 슈(泡芙)</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -615,8 +623,8 @@
             고려하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>골드 키위 생치즈 케이크</span>
-            <span>딸기 샹티 케이크</span>
+            <figure><img src="/images/portfolio/kiwi-cheesecake.jpg" alt="골드 키위 생치즈 케이크" loading="lazy"><figcaption>골드 키위 생치즈 케이크</figcaption></figure>
+            <figure><img src="/images/portfolio/strawberry-chantilly-cake.jpg" alt="딸기 샹티 케이크" loading="lazy"><figcaption>딸기 샹티 케이크</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -630,8 +638,8 @@
             디저트와 고급 식재료의 경계를 확장하였습니다.
           </p>
           <div class="portfolio-item-products">
-            <span>캐비어 치즈 무스 케이크 (미니 사이즈)</span>
-            <span>캐비어 치즈 무스 케이크</span>
+            <figure><img src="/images/portfolio/caviar-mousse-mini.jpg" alt="캐비어 치즈 무스 케이크 (미니 사이즈)" loading="lazy"><figcaption>캐비어 치즈 무스 케이크 (미니 사이즈)</figcaption></figure>
+            <figure><img src="/images/portfolio/caviar-mousse-cake.jpg" alt="캐비어 치즈 무스 케이크" loading="lazy"><figcaption>캐비어 치즈 무스 케이크</figcaption></figure>
           </div>
         </li>
       </ul>

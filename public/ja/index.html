@@ -246,16 +246,24 @@
   .portfolio-item-head h3{ font-size:1.15rem; font-weight:600; }
   .portfolio-item-desc{ color:var(--ink-soft); font-size:.98rem; max-width:72ch; }
   .portfolio-item-products{
-    margin-block-start:12px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    margin-block-start:16px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap:14px;
   }
-  .portfolio-item-products span{
-    font-size:.82rem;
-    padding:4px 10px;
-    background:var(--surface);
+  .portfolio-item-products figure{ margin:0; }
+  .portfolio-item-products img{
+    display:block;
+    width:100%;
+    aspect-ratio: 3 / 4;
+    object-fit:cover;
     border:1px solid var(--line);
+    background:var(--surface);
+  }
+  .portfolio-item-products figcaption{
+    margin-block-start:6px;
+    font-size:.78rem;
+    line-height:1.3;
     color:var(--ink-soft);
   }
 
@@ -535,11 +543,11 @@
             構築しました。
           </p>
           <div class="portfolio-item-products">
-            <span>チョコレートバスクチーズケーキ</span>
-            <span>生チョコレートケーキ</span>
-            <span>チョコレートガナッシュケーキ</span>
-            <span>チョコレートコーティングマドレーヌ</span>
-            <span>ヘーゼルナッツチョコレートバー</span>
+            <figure><img src="/images/portfolio/choc-basque-cheesecake.jpg" alt="チョコレートバスクチーズケーキ" loading="lazy"><figcaption>チョコレートバスクチーズケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/raw-chocolate-cake.jpg" alt="生チョコレートケーキ" loading="lazy"><figcaption>生チョコレートケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-ganache-cake.jpg" alt="チョコレートガナッシュケーキ" loading="lazy"><figcaption>チョコレートガナッシュケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-madeleines.jpg" alt="チョコレートコーティングマドレーヌ" loading="lazy"><figcaption>チョコレートコーティングマドレーヌ</figcaption></figure>
+            <figure><img src="/images/portfolio/hazelnut-chocolate-bar.jpg" alt="ヘーゼルナッツチョコレートバー" loading="lazy"><figcaption>ヘーゼルナッツチョコレートバー</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -554,7 +562,7 @@
             プレミアムなハンドメイドチョコレートラインを構築しました。
           </p>
           <div class="portfolio-item-products">
-            <span>各種フレーバーのチョコレートボンボン</span>
+            <figure><img src="/images/portfolio/chocolate-bonbon.jpg" alt="各種フレーバーのチョコレートボンボン" loading="lazy"><figcaption>各種フレーバーのチョコレートボンボン</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -568,10 +576,10 @@
             インスピレーションを得て、ブランドストーリーを視覚と味覚で表現しました。
           </p>
           <div class="portfolio-item-products">
-            <span>琥珀糖ミニタルト</span>
-            <span>タイガーアイ・紅茶ムースカップ</span>
-            <span>パンダン・シャンティイケーキ</span>
-            <span>アメリカンスタイル・キャロットケーキ</span>
+            <figure><img src="/images/portfolio/amber-sugar-tart.jpg" alt="琥珀糖ミニタルト" loading="lazy"><figcaption>琥珀糖ミニタルト</figcaption></figure>
+            <figure><img src="/images/portfolio/tiger-eye-tea-mousse.jpg" alt="タイガーアイ・紅茶ムースカップ" loading="lazy"><figcaption>タイガーアイ・紅茶ムースカップ</figcaption></figure>
+            <figure><img src="/images/portfolio/pandan-cream-cake.jpg" alt="パンダン・シャンティイケーキ" loading="lazy"><figcaption>パンダン・シャンティイケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/american-carrot-cake.jpg" alt="アメリカンスタイル・キャロットケーキ" loading="lazy"><figcaption>アメリカンスタイル・キャロットケーキ</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -585,9 +593,9 @@
             親しみやすい味わいのバランスを追求しました。
           </p>
           <div class="portfolio-item-products">
-            <span>ダブルレイヤー抹茶チーズケーキ</span>
-            <span>チョコレート&amp;ブラックカラントムースケーキ</span>
-            <span>各種フレーバーのカヌレ</span>
+            <figure><img src="/images/portfolio/matcha-cheesecake.jpg" alt="ダブルレイヤー抹茶チーズケーキ" loading="lazy"><figcaption>ダブルレイヤー抹茶チーズケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/chocolate-blackcurrant-mousse.jpg" alt="チョコレート&amp;ブラックカラントムースケーキ" loading="lazy"><figcaption>チョコレート&amp;ブラックカラントムースケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/canele.jpg" alt="各種フレーバーのカヌレ" loading="lazy"><figcaption>各種フレーバーのカヌレ</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -600,8 +608,8 @@
             軽やかな食感とすっきりとした風味を中心に設計し、食後を爽やかに締めくくれるよう仕上げました。
           </p>
           <div class="portfolio-item-products">
-            <span>台湾産フレッシュフルーツのアイスバー&amp;ジャム</span>
-            <span>ダブルフィリングシュー</span>
+            <figure><img src="/images/portfolio/fruit-ice-bars.jpg" alt="台湾産フレッシュフルーツのアイスバー&amp;ジャム" loading="lazy"><figcaption>台湾産フレッシュフルーツのアイスバー&amp;ジャム</figcaption></figure>
+            <figure><img src="/images/portfolio/double-filled-choux.jpg" alt="ダブルフィリングシュー" loading="lazy"><figcaption>ダブルフィリングシュー</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -614,8 +622,8 @@
             鮮度と風味を最大限に活かしながら、デザートとしての完成度と商品性を両立させました。
           </p>
           <div class="portfolio-item-products">
-            <span>ゴールドキウイの生チーズケーキ</span>
-            <span>いちごのシャンティイケーキ</span>
+            <figure><img src="/images/portfolio/kiwi-cheesecake.jpg" alt="ゴールドキウイの生チーズケーキ" loading="lazy"><figcaption>ゴールドキウイの生チーズケーキ</figcaption></figure>
+            <figure><img src="/images/portfolio/strawberry-chantilly-cake.jpg" alt="いちごのシャンティイケーキ" loading="lazy"><figcaption>いちごのシャンティイケーキ</figcaption></figure>
           </div>
         </li>
         <li class="portfolio-item">
@@ -629,8 +637,8 @@
             高級食材の境界を超える新しい体験を生み出しました。
           </p>
           <div class="portfolio-item-products">
-            <span>キャビアチーズムースケーキ(ミニサイズ)</span>
-            <span>キャビアチーズムースケーキ</span>
+            <figure><img src="/images/portfolio/caviar-mousse-mini.jpg" alt="キャビアチーズムースケーキ(ミニサイズ)" loading="lazy"><figcaption>キャビアチーズムースケーキ(ミニサイズ)</figcaption></figure>
+            <figure><img src="/images/portfolio/caviar-mousse-cake.jpg" alt="キャビアチーズムースケーキ" loading="lazy"><figcaption>キャビアチーズムースケーキ</figcaption></figure>
           </div>
         </li>
       </ul>
