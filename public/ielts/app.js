@@ -15,6 +15,48 @@ const fmtTime = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s 
 const roundHalf = x => Math.round(x * 2) / 2;
 const findTest = (section, id) => TESTS[section].find(t => t.id === id);
 
+/* ---------- 帳號與雲端同步 ---------- */
+const getAuth = () => store.get('ielts.auth', null);
+async function api(path, opts = {}) {
+  const a = getAuth();
+  const res = await fetch(path, { ...opts, headers: { 'content-type': 'application/json', ...(a ? { authorization: 'Bearer ' + a.token } : {}) } });
+  if (res.status === 401 && a) store.set('ielts.auth', null);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || res.status);
+  return data;
+}
+// 雙向合併：本機與伺服器的紀錄取聯集（依 id），失敗時靜默保留本機資料
+async function syncNow() {
+  if (!getAuth()) return false;
+  try {
+    const d = await api('/api/ielts/sync', { method: 'POST', body: JSON.stringify({ history: getHistory(), mastered: store.get('ielts.mastered', []) }) });
+    store.set('ielts.history', d.history);
+    store.set('ielts.mastered', d.mastered);
+    store.set('ielts.lastSync', Date.now());
+    return true;
+  } catch { return false; }
+}
+const syncDelete = q => getAuth() && api('/api/ielts/records' + q, { method: 'DELETE' }).catch(() => { });
+function accountCard() {
+  const a = getAuth(), last = store.get('ielts.lastSync', 0);
+  if (a) return `<div class="card row"><span>☁️ 已登入 <b>${esc(a.name)}</b>${last ? ` · 上次同步 ${fmtDate(last)}` : ''}</span><span class="spacer"></span><button class="btn sm ghost" data-act="syncBtn">立即同步</button><button class="btn sm ghost" data-act="logout">登出</button></div>`;
+  return `<div class="card"><b>☁️ 雲端同步（選用）</b> <span class="muted">登入後成績會自動備份，換裝置也能看到。</span>
+    <form id="authForm" class="row" style="margin-top:8px"><input type="text" name="name" placeholder="暱稱" maxlength="30" required autocomplete="username"><input type="password" name="passcode" placeholder="密碼（至少 6 碼）" minlength="6" required autocomplete="current-password" style="width:180px;font:inherit;background:var(--bg);color:inherit;border:1px solid var(--line);border-radius:6px;padding:5px 9px">
+    <button class="btn sm" type="submit" value="login">登入</button><button class="btn sm ghost" type="submit" value="register">註冊新帳號</button><span class="muted" id="authMsg"></span></form></div>`;
+}
+app.addEventListener('submit', async e => {
+  if (e.target.id !== 'authForm') return;
+  e.preventDefault();
+  const f = e.target, msg = document.getElementById('authMsg');
+  msg.textContent = '處理中…';
+  try {
+    const d = await api('/api/ielts/auth', { method: 'POST', body: JSON.stringify({ name: f.name.value, passcode: f.passcode.value, mode: e.submitter?.value || 'login' }) });
+    store.set('ielts.auth', { token: d.token, name: d.name });
+    await syncNow();
+    route();
+  } catch (err) { msg.textContent = '失敗：' + err.message; }
+});
+
 /* ---------- 評分 ---------- */
 const BAND_TABLE = {
   reading: [[39, 9], [37, 8.5], [35, 8], [33, 7.5], [30, 7], [27, 6.5], [23, 6], [19, 5.5], [15, 5], [13, 4.5], [10, 4], [8, 3.5], [6, 3], [4, 2.5]],
@@ -225,6 +267,7 @@ async function finish(auto) {
   if (!store.set('ielts.history', h)) alert('無法寫入瀏覽器儲存空間，成績可能不會保留。請使用「匯出備份」。');
   store.set('ielts.draft', null);
   location.hash = '#/result/' + rec.id;
+  syncNow();
 }
 const emptyEval = () => ({ method: 'none', criteria: { ta: 1, cc: 1, lr: 1, gra: 1 }, overall: 1, strengths: [], improvements: ['幾乎沒有作答（少於 20 字），無法評分。'], corrections: [] });
 
@@ -325,7 +368,7 @@ function trendChart(hist) {
 }
 function viewHome() {
   const hist = getHistory(), d = getDraft();
-  let html = '<h1>IELTS 模擬考</h1><p class="muted">計時作答 → 自動批改 → 錯誤歸因 → 保存紀錄 → 弱點與進步建議。題目為原創練習題，成績僅供估算參考。</p>';
+  let html = accountCard() + '<h1>IELTS 模擬考</h1><p class="muted">計時作答 → 自動批改 → 錯誤歸因 → 保存紀錄 → 弱點與進步建議。題目為原創練習題，成績僅供估算參考。</p>';
   if (d) {
     const t = findTest(d.section, d.testId);
     if (t) html += `<div class="card" style="background:var(--warnbg)"><b>有一份未完成的考試：</b>${esc(t.title)}（${Math.max(0, Math.round((d.endAt - Date.now()) / 60000))} 分鐘剩餘）
@@ -404,14 +447,16 @@ function reviewCard(q, x, i) {
 /* ---------- 畫面：紀錄 / 錯題本 ---------- */
 const actions = {
   dropDraft() { if (confirm('放棄未完成的考試？')) { store.set('ielts.draft', null); route(); } },
-  del(t) { if (confirm('刪除這筆紀錄？')) { store.set('ielts.history', getHistory().filter(h => h.id !== t.dataset.id)); route(); } },
-  mastered(t) { store.set('ielts.mastered', [...store.get('ielts.mastered', []), t.dataset.id]); route(); },
+  del(t) { if (confirm('刪除這筆紀錄？')) { store.set('ielts.history', getHistory().filter(h => h.id !== t.dataset.id)); syncDelete('?id=' + encodeURIComponent(t.dataset.id)); route(); } },
+  mastered(t) { store.set('ielts.mastered', [...store.get('ielts.mastered', []), t.dataset.id]); syncNow(); route(); },
   export() {
     const blob = new Blob([JSON.stringify({ history: getHistory(), mastered: store.get('ielts.mastered', []) }, null, 1)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ielts-records.json'; a.click();
   },
   import() { document.getElementById('file').click(); },
-  clear() { if (confirm('清除所有成績紀錄？此動作無法復原（建議先匯出備份）。')) { store.set('ielts.history', []); store.set('ielts.mastered', []); route(); } },
+  clear() { if (confirm('清除所有成績紀錄？此動作無法復原（建議先匯出備份）。')) { store.set('ielts.history', []); store.set('ielts.mastered', []); syncDelete(''); route(); } },
+  async syncBtn(t) { t.textContent = '同步中…'; const ok = await syncNow(); if (!ok) alert('同步失敗，請確認網路或重新登入。'); route(); },
+  async logout() { await api('/api/ielts/logout', { method: 'POST' }).catch(() => { }); store.set('ielts.auth', null); route(); },
 };
 app.addEventListener('change', e => {
   if (e.target.id !== 'file' || !e.target.files[0]) return;
@@ -421,13 +466,14 @@ app.addEventListener('change', e => {
     const have = new Set(getHistory().map(h => h.id));
     store.set('ielts.history', [...getHistory(), ...d.history.filter(h => h && h.id && !have.has(h.id))]);
     store.set('ielts.mastered', [...new Set([...store.get('ielts.mastered', []), ...(d.mastered || [])])]);
+    syncNow();
     route();
   }).catch(() => alert('檔案格式不正確。'));
 });
 function viewHistory() {
   const hist = [...getHistory()].sort((a, b) => b.date - a.date);
   app.innerHTML = `<div class="row"><h1>成績紀錄</h1><span class="spacer"></span><button class="btn sm ghost" data-act="export">匯出備份</button><button class="btn sm ghost" data-act="import">匯入</button><button class="btn sm ghost" data-act="clear">清除全部</button><input id="file" type="file" accept="application/json" hidden></div>
-  <p class="muted">紀錄保存在這台裝置的瀏覽器中（localStorage）。換裝置或清除瀏覽資料前，請先匯出備份。</p>
+  ${accountCard()}<p class="muted">未登入時紀錄只保存在這台裝置的瀏覽器中；登入後會同步到雲端。也可以隨時匯出 JSON 備份。</p>
   <div class="card">${hist.length ? `<table class="t"><tr><th>日期</th><th>科目</th><th>Band</th><th>得分</th><th>用時</th><th></th></tr>${hist.map(h => `<tr><td>${fmtDate(h.date)}</td><td>${esc(SECTION_NAME[h.section])}</td><td><b>${h.band}</b></td><td>${h.results ? h.raw + '/' + h.total : '—'}</td><td>${fmtTime(h.usedSec)}</td><td><a href="#/result/${h.id}">詳情</a> · <a href="#/history" data-act="del" data-id="${h.id}">刪除</a></td></tr>`).join('')}</table>` : '<p class="muted">尚無紀錄。</p>'}</div>`;
 }
 app.addEventListener('click', e => { if (e.target.dataset.act === 'del' || e.target.dataset.act === 'mastered') e.preventDefault(); });
@@ -454,3 +500,4 @@ function route() {
 }
 window.addEventListener('hashchange', route);
 route();
+if (getAuth()) syncNow().then(ok => ok && !location.hash.startsWith('#/test') && route());

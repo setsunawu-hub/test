@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: ielts-mock
+    runtime: node
+    plan: starter            # 持久磁碟需要付費方案
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true         # 每次 push 到連結的分支就自動部署
+    healthCheckPath: /ielts/index.html
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: ANTHROPIC_API_KEY
+        sync: false          # 在 Render 後台填入，不要寫進 repo
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1

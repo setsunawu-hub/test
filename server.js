@@ -1,9 +1,10 @@
 const path = require('path');
+const crypto = require('crypto');
 const fs = require('fs');
 const express = require('express');
 const Database = require('better-sqlite3');
 
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const db = new Database(path.join(DATA_DIR, 'guestbook.db'));
@@ -21,6 +22,7 @@ const MAX_NAME = 40;
 const MAX_MESSAGE = 280;
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '10kb' }));
 
 app.get('/api/messages', (req, res) => {
@@ -131,6 +133,111 @@ app.post('/api/summary', async (req, res) => {
     console.error('Anthropic API request error:', err);
     res.status(502).json({ error: 'AI summary request failed' });
   }
+});
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS ielts_users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    salt TEXT NOT NULL,
+    hash TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE TABLE IF NOT EXISTS ielts_sessions (
+    token_hash TEXT PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE TABLE IF NOT EXISTS ielts_records (
+    user_id INTEGER NOT NULL,
+    id TEXT NOT NULL,
+    date INTEGER NOT NULL,
+    data TEXT NOT NULL,
+    PRIMARY KEY (user_id, id)
+  );
+  CREATE TABLE IF NOT EXISTS ielts_mastered (
+    user_id INTEGER NOT NULL,
+    qid TEXT NOT NULL,
+    PRIMARY KEY (user_id, qid)
+  );
+`);
+
+const SESSION_TTL_MS = 90 * 24 * 3600 * 1000;
+const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
+const scrypt = (pw, salt) => crypto.scryptSync(pw, salt, 32).toString('hex');
+
+// 登入嘗試限制：每個 IP 15 分鐘內最多 20 次
+const attempts = new Map();
+function tooMany(ip) {
+  const now = Date.now();
+  const list = (attempts.get(ip) || []).filter((t) => now - t < 15 * 60 * 1000);
+  list.push(now);
+  attempts.set(ip, list);
+  return list.length > 20;
+}
+
+function auth(req, res, next) {
+  const token = (req.headers.authorization || '').replace(/^Bearer /, '');
+  const row = token && db.prepare('SELECT user_id, created_at FROM ielts_sessions WHERE token_hash = ?').get(sha(token));
+  if (!row || Date.now() - row.created_at > SESSION_TTL_MS) return res.status(401).json({ error: 'unauthorized' });
+  req.userId = row.user_id;
+  next();
+}
+
+app.post('/api/ielts/auth', (req, res) => {
+  if (tooMany(req.ip)) return res.status(429).json({ error: 'too many attempts' });
+  const name = String(req.body?.name ?? '').trim().slice(0, 30);
+  const passcode = String(req.body?.passcode ?? '');
+  const mode = req.body?.mode === 'register' ? 'register' : 'login';
+  if (!/^[\w\u4e00-\u9fff .-]{2,30}$/.test(name) || passcode.length < 6 || passcode.length > 100) {
+    return res.status(400).json({ error: 'invalid name or passcode (min 6 chars)' });
+  }
+  let user = db.prepare('SELECT * FROM ielts_users WHERE name = ?').get(name);
+  if (mode === 'register') {
+    if (user) return res.status(409).json({ error: 'name already taken' });
+    const salt = crypto.randomBytes(16).toString('hex');
+    const info = db.prepare('INSERT INTO ielts_users (name, salt, hash) VALUES (?, ?, ?)').run(name, salt, scrypt(passcode, salt));
+    user = { id: info.lastInsertRowid, name };
+  } else {
+    const ok = user && crypto.timingSafeEqual(Buffer.from(scrypt(passcode, user.salt), 'hex'), Buffer.from(user.hash, 'hex'));
+    if (!ok) return res.status(401).json({ error: 'wrong name or passcode' });
+  }
+  const token = crypto.randomBytes(32).toString('hex');
+  db.prepare('INSERT INTO ielts_sessions (token_hash, user_id, created_at) VALUES (?, ?, ?)').run(sha(token), user.id, Date.now());
+  res.json({ token, name: user.name });
+});
+
+app.post('/api/ielts/logout', auth, (req, res) => {
+  db.prepare('DELETE FROM ielts_sessions WHERE token_hash = ?').run(sha((req.headers.authorization || '').replace(/^Bearer /, '')));
+  res.json({ ok: true });
+});
+
+// 雙向合併：客戶端送上本機紀錄，伺服器回傳合併後的完整資料
+app.post('/api/ielts/sync', express.json({ limit: '4mb' }), auth, (req, res) => {
+  const history = Array.isArray(req.body?.history) ? req.body.history.slice(0, 2000) : [];
+  const mastered = Array.isArray(req.body?.mastered) ? req.body.mastered.slice(0, 5000) : [];
+  const insRec = db.prepare('INSERT OR IGNORE INTO ielts_records (user_id, id, date, data) VALUES (?, ?, ?, ?)');
+  const insM = db.prepare('INSERT OR IGNORE INTO ielts_mastered (user_id, qid) VALUES (?, ?)');
+  db.transaction(() => {
+    for (const h of history) {
+      if (h && typeof h.id === 'string' && h.id.length < 40 && Number.isFinite(h.date)) insRec.run(req.userId, h.id, h.date, JSON.stringify(h));
+    }
+    for (const q of mastered) if (typeof q === 'string' && q.length < 40) insM.run(req.userId, q);
+  })();
+  res.json({
+    history: db.prepare('SELECT data FROM ielts_records WHERE user_id = ? ORDER BY date').all(req.userId).map((r) => JSON.parse(r.data)),
+    mastered: db.prepare('SELECT qid FROM ielts_mastered WHERE user_id = ?').all(req.userId).map((r) => r.qid),
+  });
+});
+
+app.delete('/api/ielts/records', auth, (req, res) => {
+  const id = req.query.id;
+  if (id) db.prepare('DELETE FROM ielts_records WHERE user_id = ? AND id = ?').run(req.userId, String(id));
+  else {
+    db.prepare('DELETE FROM ielts_records WHERE user_id = ?').run(req.userId);
+    db.prepare('DELETE FROM ielts_mastered WHERE user_id = ?').run(req.userId);
+  }
+  res.json({ ok: true });
 });
 
 const IELTS_MODEL = process.env.IELTS_MODEL || 'claude-sonnet-5-5';
