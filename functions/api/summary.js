@@ -73,19 +73,24 @@ export async function onRequestPost({ request, env }) {
   }
 
   let summary;
+  let rawResult;
   try {
     const list = rows.map((r) => `${r.name}:${r.message}`).join('\n');
     const result = await env.AI.run(MODEL, {
       messages: [{ role: 'user', content: copy.prompt(list) }],
       max_completion_tokens: 600,
     });
+    rawResult = result;
     summary = extractText(result);
   } catch (err) {
     console.error('Workers AI error:', err.message);
     return json({ error: 'AI summary request failed' }, 502);
   }
 
-  if (!summary) return json({ summary: copy.fallback });
+  if (!summary) {
+    // TEMPORARY DIAGNOSTIC: remove once the Workers AI output shape is confirmed.
+    return json({ summary: copy.fallback, debug: JSON.stringify(rawResult).slice(0, 2000) });
+  }
 
   await env.DB.prepare(
     `INSERT INTO summaries (lang, signature, summary) VALUES (?, ?, ?)
