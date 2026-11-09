@@ -1,7 +1,9 @@
 import { json, readJson } from '../../lib/http.js';
 import { isRateLimited } from '../../lib/ratelimit.js';
 
-const MODEL = '@cf/zai-org/glm-4.7-flash';
+// Non-reasoning model on purpose: reasoning models (glm-4.7-flash, qwen3) spend the token
+// budget on hidden thinking and can return `content: null`, and take 20-30s.
+const MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 const SUMMARIES_PER_HOUR = 20;
 const MAX_MESSAGES = 50;
 
@@ -33,8 +35,7 @@ const SUMMARY_LANGS = {
   },
 };
 
-// The model page does not document the output shape, so accept both the legacy
-// `response` field and the OpenAI-style `choices` array.
+// Chat models return an OpenAI-style `choices` array; older ones use `response`.
 function extractText(result) {
   const text = result?.response ?? result?.choices?.[0]?.message?.content ?? '';
   return String(text).replace(/<think>[\s\S]*?<\/think>/g, '').trim();
@@ -72,32 +73,18 @@ export async function onRequestPost({ request, env }) {
     return json({ error: 'AI summary request failed' }, 500);
   }
 
-  // TEMPORARY EXPERIMENT: pick a model/setting via body.debug to compare latency and output shape.
-  const VARIANTS = {
-    a: { model: '@cf/zai-org/glm-4.7-flash', input: { max_completion_tokens: 300, chat_template_kwargs: { enable_thinking: false } } },
-    b: { model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', input: { max_tokens: 200 } },
-    c: { model: '@cf/qwen/qwen3-30b-a3b-fp8', input: { max_completion_tokens: 300, chat_template_kwargs: { enable_thinking: false } } },
-  };
-  const variant = VARIANTS[body.debug];
-
   let summary;
-  let rawResult;
-  const t0 = Date.now();
   try {
     const list = rows.map((r) => `${r.name}:${r.message}`).join('\n');
-    const result = await env.AI.run(variant ? variant.model : MODEL, {
+    const result = await env.AI.run(MODEL, {
       messages: [{ role: 'user', content: copy.prompt(list) }],
-      ...(variant ? variant.input : { max_completion_tokens: 600 }),
+      max_tokens: 200,
     });
-    rawResult = result;
     summary = extractText(result);
   } catch (err) {
     console.error('Workers AI error:', err.message);
-    if (variant) return json({ error: 'AI summary request failed', debug: String(err.message).slice(0, 500), ms: Date.now() - t0 }, 502);
     return json({ error: 'AI summary request failed' }, 502);
   }
-
-  if (variant) return json({ summary, ms: Date.now() - t0, debug: JSON.stringify(rawResult).slice(0, 700) });
 
   if (!summary) return json({ summary: copy.fallback });
 
