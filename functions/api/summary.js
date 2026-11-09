@@ -72,25 +72,34 @@ export async function onRequestPost({ request, env }) {
     return json({ error: 'AI summary request failed' }, 500);
   }
 
+  // TEMPORARY EXPERIMENT: pick a model/setting via body.debug to compare latency and output shape.
+  const VARIANTS = {
+    a: { model: '@cf/zai-org/glm-4.7-flash', input: { max_completion_tokens: 300, chat_template_kwargs: { enable_thinking: false } } },
+    b: { model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast', input: { max_tokens: 200 } },
+    c: { model: '@cf/qwen/qwen3-30b-a3b-fp8', input: { max_completion_tokens: 300, chat_template_kwargs: { enable_thinking: false } } },
+  };
+  const variant = VARIANTS[body.debug];
+
   let summary;
   let rawResult;
+  const t0 = Date.now();
   try {
     const list = rows.map((r) => `${r.name}:${r.message}`).join('\n');
-    const result = await env.AI.run(MODEL, {
+    const result = await env.AI.run(variant ? variant.model : MODEL, {
       messages: [{ role: 'user', content: copy.prompt(list) }],
-      max_completion_tokens: 600,
+      ...(variant ? variant.input : { max_completion_tokens: 600 }),
     });
     rawResult = result;
     summary = extractText(result);
   } catch (err) {
     console.error('Workers AI error:', err.message);
+    if (variant) return json({ error: 'AI summary request failed', debug: String(err.message).slice(0, 500), ms: Date.now() - t0 }, 502);
     return json({ error: 'AI summary request failed' }, 502);
   }
 
-  if (!summary) {
-    // TEMPORARY DIAGNOSTIC: remove once the Workers AI output shape is confirmed.
-    return json({ summary: copy.fallback, debug: JSON.stringify(rawResult).slice(0, 2000) });
-  }
+  if (variant) return json({ summary, ms: Date.now() - t0, debug: JSON.stringify(rawResult).slice(0, 700) });
+
+  if (!summary) return json({ summary: copy.fallback });
 
   await env.DB.prepare(
     `INSERT INTO summaries (lang, signature, summary) VALUES (?, ?, ?)
